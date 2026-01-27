@@ -1,6 +1,6 @@
 # VR Unity Project
 
-## Game Object
+## Game Objects
 
 ### Snowman
 - Layer: Player
