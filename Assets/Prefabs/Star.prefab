@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 8766182419549003708}
   - component: {fileID: 232677789519412298}
   - component: {fileID: 4282135810255309050}
-  - component: {fileID: 4380434057785362798}
   m_Layer: 0
   m_Name: StarPoint_2
   m_TagString: Untagged
@@ -90,27 +89,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &4380434057785362798
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 726502832442475758}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5669323855468419836
 GameObject:
   m_ObjectHideFlags: 0
@@ -120,6 +98,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2389447396602943485}
+  - component: {fileID: -8915265901333301176}
+  - component: {fileID: 2856390741668255806}
   m_Layer: 0
   m_Name: Star
   m_TagString: Untagged
@@ -146,6 +126,40 @@ Transform:
   - {fileID: 7010434024715693480}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-8915265901333301176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5669323855468419836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c02c2cf87d465b4dbbef4fe5da2d219, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  body: {fileID: 5669323855468419836}
+--- !u!135 &2856390741668255806
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5669323855468419836}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6178319792969056824
 GameObject:
   m_ObjectHideFlags: 0
@@ -157,7 +171,6 @@ GameObject:
   - component: {fileID: 7010434024715693480}
   - component: {fileID: 9192775944426339980}
   - component: {fileID: 3077845030473255852}
-  - component: {fileID: 7354885771552793140}
   m_Layer: 0
   m_Name: StarPoint_4
   m_TagString: Untagged
@@ -236,27 +249,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &7354885771552793140
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6178319792969056824}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8171847578691766520
 GameObject:
   m_ObjectHideFlags: 0
@@ -268,7 +260,6 @@ GameObject:
   - component: {fileID: 9179149039965940869}
   - component: {fileID: 1959493839804139029}
   - component: {fileID: 2091458479608635590}
-  - component: {fileID: 7782705492323712466}
   m_Layer: 0
   m_Name: StarPoint_1
   m_TagString: Untagged
@@ -286,7 +277,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.4, y: 2, z: 0.5}
+  m_LocalScale: {x: 0.3, y: 2, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2389447396602943485}
@@ -347,27 +338,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &7782705492323712466
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8171847578691766520}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8858769735149962015
 GameObject:
   m_ObjectHideFlags: 0
@@ -379,7 +349,6 @@ GameObject:
   - component: {fileID: 383101980222795333}
   - component: {fileID: 6666347451511451547}
   - component: {fileID: 8727488975793508891}
-  - component: {fileID: 8606904155393450936}
   m_Layer: 0
   m_Name: StarPoint_3
   m_TagString: Untagged
@@ -458,24 +427,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &8606904155393450936
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8858769735149962015}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
