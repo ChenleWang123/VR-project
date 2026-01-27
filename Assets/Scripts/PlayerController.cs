@@ -104,16 +104,19 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = rb_vel;
         }
 
-        // facing moving direction
-        if (faceMoveDirection && moveDir.sqrMagnitude > 0.001f) 
+        bool hasMoveInput = Mathf.Abs(h) > 0.01f || Mathf.Abs(v) > 0.01f;
+
+        if (faceMoveDirection && hasMoveInput)
         {
-            Quaternion target = Quaternion.LookRotation(moveDir, Vector3.up); // Vector3.up: +Y (world)
-            Quaternion newRot = Quaternion.RotateTowards(rb.rotation, target, turnSpeedDeg * Time.fixedDeltaTime); // from current Quaternion of rb to target
-                                                                                                                   // Rotates a rotation from towards to
-                                                                                                                   // https://docs.unity3d.com/6000.2/Documentation/ScriptReference/Quaternion.RotateTowards.html
-            rb.MoveRotation(newRot); // rotates the rigidbody to "rotation"
-                                     // https://docs.unity3d.com/6000.2/Documentation/ScriptReference/Rigidbody.MoveRotation.html
+            Quaternion target = Quaternion.LookRotation(moveDir, Vector3.up);
+            Quaternion newRot = Quaternion.RotateTowards(
+                rb.rotation,
+                target,
+                turnSpeedDeg * Time.fixedDeltaTime
+            );
+            rb.MoveRotation(newRot);
         }
+
     }
 
     void Jump()
