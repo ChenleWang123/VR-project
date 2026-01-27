@@ -205,13 +205,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 71295513}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.23599018, y: 0, z: 0, w: 0.97175545}
-  m_LocalPosition: {x: 0, y: 9.3, z: -10.76}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0.043619405, y: 0, z: 0, w: 0.9990483}
+  m_LocalPosition: {x: 0, y: 1.5, z: -3}
+  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 976528094}
-  m_LocalEulerAnglesHint: {x: 27.3, y: 0, z: 0}
+  m_Father: {fileID: 955679503}
+  m_LocalEulerAnglesHint: {x: 5, y: 0, z: 0}
 --- !u!114 &71295517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1186,6 +1186,57 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8022064794728318217, guid: 9e4bb8c16ff6bab488e03b03b23640f0, type: 3}
   m_PrefabInstance: {fileID: 832343638}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &955679502
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 955679503}
+  - component: {fileID: 955679504}
+  m_Layer: 9
+  m_Name: CameraRig
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &955679503
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 955679502}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 4, y: 4, z: 4}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 71295516}
+  m_Father: {fileID: 976528094}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &955679504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 955679502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd3e873854358b240a53713a7f96a456, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MouseLookRig
+  player: {fileID: 976528094}
+  cam: {fileID: 71295516}
+  sensitivity: 2
+  pitchMin: -80
+  pitchMax: 80
+  followOffset: {x: 0, y: 1.6, z: 0}
 --- !u!1 &976528093
 GameObject:
   m_ObjectHideFlags: 0
@@ -1223,7 +1274,7 @@ Transform:
   - {fileID: 140002840}
   - {fileID: 1566809556}
   - {fileID: 1119217930}
-  - {fileID: 71295516}
+  - {fileID: 955679503}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &976528096
