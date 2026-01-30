@@ -4,6 +4,11 @@ using Apt.Unity.Projection;
 
 public class StereoCameraController : MonoBehaviour
 {
+    public enum FilterType
+    {
+        None, MovingAverage, SingleExponential, DoubleExponential, OneEuro
+    }
+
     [Header("Stereo Cameras")]
     public Camera leftCamera;
     public Camera rightCamera;
@@ -22,10 +27,10 @@ public class StereoCameraController : MonoBehaviour
     [Header("Head Tracking")]
     public Tutorial_4.HeadTracker headTracker;
 
-    [Tooltip("Where to apply head rotation offset. Recommended: Main Camera transform (child of CameraRig).")]
-    public Transform rotationTarget;
+    [Tooltip("Anchor that parents all cameras. Apply head pose here.")]
+    public Transform headAnchor;
 
-    [Tooltip("Offset applied to rig local position (e.g., Y=1.6 for eye height).")]
+    [Tooltip("Offset applied to headAnchor local position (e.g., Y=1.6 for eye height).")]
     public Vector3 headOffset = new Vector3(0f, 1.6f, 0f);
 
     [Tooltip("Scale factor for head tracking translation.")]
@@ -40,36 +45,53 @@ public class StereoCameraController : MonoBehaviour
     public bool invertZ = false;
 
     [Header("Rotation")]
-    [Tooltip("Enable head rotation offset.")]
+    [Tooltip("Apply head rotation offset (from HeadTracker) to headAnchor.")]
     public bool applyHeadRotation = true;
 
-    [Tooltip("Extra multiplier for rotation strength.")]
     [Range(0f, 2f)]
     public float rotationStrength = 1.0f;
 
-    private Vector3 _lastHeadRigLocalPos;
-    private Quaternion _rotationTargetBaseLocalRot;
+    [Header("Filtering (Position Only)")]
+    public FilterType positionFilterType = FilterType.OneEuro;
+
+    [Tooltip("Reference to Filter component in the scene.")]
+    public Tutorial_4.Filter filter;
+
+    private Vector3 _lastHeadAnchorLocalPos;
+    private Quaternion _headAnchorBaseLocalRot;
 
     private void Start()
     {
-        // Cache the base local rotation of the rotation target so we can add head offset on top.
-        if (rotationTarget != null)
-            _rotationTargetBaseLocalRot = rotationTarget.localRotation;
+        if (headAnchor == null)
+        {
+            Debug.LogError("HeadAnchor is not assigned. Please create a HeadAnchor under CameraRig and assign it.");
+            headAnchor = transform; // fallback to avoid null crash
+        }
+
+        _headAnchorBaseLocalRot = headAnchor.localRotation;
+
+        if (filter == null)
+        {
+            // Try to auto-find a Filter in the scene
+            filter = FindAnyObjectByType<Tutorial_4.Filter>();
+            if (filter == null)
+                Debug.LogWarning("Filter reference is null. Position filtering will be disabled.");
+        }
     }
 
     private void Update()
     {
-        // 0) Update head tracking pose (without touching CameraRig rotation to avoid conflicts).
-        UpdateFromHeadTracker();
+        // 0) Update head anchor pose (translation + optional rotation).
+        UpdateHeadAnchorFromTracker();
 
-        // 1) Set left/right eye local positions (IPD).
+        // 1) IPD offsets (relative to headAnchor).
         if (leftCamera != null)
             leftCamera.transform.localPosition = Vector3.left * ipd / 2f;
 
         if (rightCamera != null)
             rightCamera.transform.localPosition = Vector3.right * ipd / 2f;
 
-        // 2) Toe-in or parallel.
+        // 2) Toe-in or parallel cameras.
         if (toe_in && convergencePoint != null)
         {
             if (leftCamera != null) leftCamera.transform.LookAt(convergencePoint);
@@ -86,54 +108,78 @@ public class StereoCameraController : MonoBehaviour
         if (rightCamera != null) ApplyOffAxisProjection(rightCamera);
     }
 
-    private void UpdateFromHeadTracker()
+    private void UpdateHeadAnchorFromTracker()
     {
-        if (headTracker == null)
+        if (headTracker == null || headAnchor == null)
             return;
 
         Vector3 h = headTracker.DetectedFace;
         bool hasFace = h != Vector3.zero;
 
-        // Position
         if (!hasFace)
         {
             if (freezeWhenLost)
-                transform.localPosition = _lastHeadRigLocalPos;
+                headAnchor.localPosition = _lastHeadAnchorLocalPos;
 
-            // Reset rotation target to base if face lost
-            if (rotationTarget != null && applyHeadRotation)
-                rotationTarget.localRotation = _rotationTargetBaseLocalRot;
+            if (applyHeadRotation)
+                headAnchor.localRotation = _headAnchorBaseLocalRot;
 
             return;
         }
 
+        // Axis correction for translation.
         if (invertX) h.x = -h.x;
         if (invertY) h.y = -h.y;
         if (invertZ) h.z = -h.z;
 
-        Vector3 rigLocalPos = (h * positionScale) + headOffset;
-        transform.localPosition = rigLocalPos;
-        _lastHeadRigLocalPos = rigLocalPos;
+        // Translation (then filter).
+        Vector3 anchorLocalPos = (h * positionScale) + headOffset;
+        anchorLocalPos = ApplyPositionFilter(anchorLocalPos);
 
-        // Rotation offset (apply to rotationTarget, not to CameraRig, to avoid "spinning" with MouseLookRig)
-        if (rotationTarget != null && applyHeadRotation)
+        headAnchor.localPosition = anchorLocalPos;
+        _lastHeadAnchorLocalPos = anchorLocalPos;
+
+        // Rotation offset (already smoothed/calibrated inside HeadTracker).
+        if (applyHeadRotation)
         {
             Quaternion headRot = headTracker.DetectedRotation;
 
-            // Apply strength by scaling Euler angles (simple and stable for small angles)
+            // Apply strength by scaling Euler angles (stable for small angles).
             Vector3 e = headRot.eulerAngles;
             e.x = NormalizeAngle(e.x) * rotationStrength;
             e.y = NormalizeAngle(e.y) * rotationStrength;
             e.z = 0f;
 
             Quaternion headOffsetRot = Quaternion.Euler(e);
-            rotationTarget.localRotation = _rotationTargetBaseLocalRot * headOffsetRot;
+            headAnchor.localRotation = _headAnchorBaseLocalRot * headOffsetRot;
+        }
+    }
+
+    private Vector3 ApplyPositionFilter(Vector3 value)
+    {
+        if (filter == null)
+            return value;
+
+        switch (positionFilterType)
+        {
+            case FilterType.None:
+                return value;
+            case FilterType.MovingAverage:
+                return filter.MovingAverage(value);
+            case FilterType.SingleExponential:
+                return filter.SingleExponential(value);
+            case FilterType.DoubleExponential:
+                return filter.DoubleExponential(value);
+            case FilterType.OneEuro:
+                return filter.OneEuro(value);
+            default:
+                return value;
         }
     }
 
     private static float NormalizeAngle(float a)
     {
-        // Convert 0..360 to -180..180
+        // Convert 0..360 to -180..180.
         while (a > 180f) a -= 360f;
         while (a < -180f) a += 360f;
         return a;
