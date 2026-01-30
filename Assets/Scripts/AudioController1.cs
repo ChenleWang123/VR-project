@@ -13,13 +13,13 @@ namespace Final
 
         [Header("Volume Control")]
         [Range(0, 3)]
-        [SerializeField] private float volume = 1.0f; // ÉÔÎ¢Ð¡Ò»µã
+        [SerializeField] private float volume = 1.0f; // ï¿½ï¿½Î¢Ð¡Ò»ï¿½ï¿½
         [Range(0, 1)]
         [Tooltip("0 is left, 1 is right")]
         [SerializeField] private float stereoPosition = 0.5f;
 
         [Tooltip("Maximum ITD delay in milliseconds")]
-        [SerializeField] private float maxHaasDelay = 30f; // ITD ÑÓ³ÙÉÔÎ¢·Å´ó£¬ÈÃ×óÓÒ²î¸üÃ÷ÏÔ
+        [SerializeField] private float maxHaasDelay = 30f; // ITD ï¿½Ó³ï¿½ï¿½ï¿½Î¢ï¿½Å´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         [SerializeField] private int sampleRate = 44100;
 
         [Header("References")]
@@ -85,7 +85,7 @@ namespace Final
         {
             float pan = stereoPosition * 2f - 1f;
 
-            // ÔöÇ¿×óÓÒ²îÒì 1.6 ±¶
+            // ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½ 1.6 ï¿½ï¿½
             float leftGain = Mathf.Clamp01(1f - pan) * 1.6f;
             float rightGain = Mathf.Clamp01(1f + pan) * 1.6f;
 
@@ -100,7 +100,7 @@ namespace Final
         {
             float pan = stereoPosition * 2f - 1f;
 
-            // ·Å´óÑÓ³ÙÐ§¹û
+            // ï¿½Å´ï¿½ï¿½Ó³ï¿½Ð§ï¿½ï¿½
             leftDelaySamples = pan > 0 ? Mathf.RoundToInt(Mathf.Abs(pan) * bufferSize) : 0;
             rightDelaySamples = pan < 0 ? Mathf.RoundToInt(Mathf.Abs(pan) * bufferSize) : 0;
 
@@ -130,7 +130,7 @@ namespace Final
             float pan = Vector3.Dot(player.right, toSource.normalized);
             stereoPosition = Mathf.Clamp01((pan + 1f) * 0.5f);
 
-            // ÇáÎ¢¾àÀëË¥¼õ£¬±£Ö¤ÉùÒô²»»áÌ«Ð¡
+            // ï¿½ï¿½Î¢ï¿½ï¿½ï¿½ï¿½Ë¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì«Ð¡
             float distance = Mathf.Max(toSource.magnitude, 0.1f);
             volume = Mathf.Clamp(1.2f / distance, 0.5f, 1.5f);
         }
