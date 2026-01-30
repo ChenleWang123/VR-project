@@ -1426,7 +1426,7 @@ MonoBehaviour:
   applyHeadRotation: 1
   rotationStrength: 1
   positionFilterType: 4
-  filter: {fileID: 0}
+  filter: {fileID: 547169200}
 --- !u!1 &976528093
 GameObject:
   m_ObjectHideFlags: 0
